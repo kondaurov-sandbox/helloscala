@@ -1,37 +1,35 @@
 import java.util.concurrent.Executors
 
 import scala.collection.mutable
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.Future
+
+import scala.concurrent.ExecutionContext.Implicits.global
 
 class Foo {
 
   val s = mutable.Map.empty[String, Char]
 
-  def add(key: String, value: Char): Future[Unit] = synchronized {
-    Future {
-      s(key) = value
-    }
+  def add() = {
+    println("a_start")
+    Thread.sleep(3000)
+    print("a")
   }
 
-  def remove(key: String): Future[Unit] = Future {
-    s.remove(key)
-  }
-
-  def get(key: String): Option[Char] = {
-    s.get(key)
+  def check() = {
+    print("c")
   }
 
 }
 
 object App extends App {
 
-  implicit val ec = ExecutionContext.fromExecutor(Executors.newCachedThreadPool())
 
   val foo = new Foo()
 
+  Future { foo.add() }
 
+  Thread.sleep(1000)
 
-
-  println("app")
+  Future { foo.check() }
 
 }
