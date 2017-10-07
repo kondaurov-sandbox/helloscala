@@ -1,5 +1,22 @@
 pipeline:
- backend:
-  image: hseeberger/scala-sbt
-  commands:
-    - scala compile test
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    restore: true
+    mount:
+      - ./sbt
+    volumes:
+      - /tmp/cache:/cache
+
+  backend:
+   image: hseeberger/scala-sbt
+   commands:
+     - scala compile test
+
+  restore-cache:
+    image: drillster/drone-volume-cache
+    rebuild: true
+    mount:
+      - ./sbt
+    volumes:
+      - /tmp/cache:/cache
