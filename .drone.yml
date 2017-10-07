@@ -1,0 +1,5 @@
+pipeline:
+ backend:
+  image: hseeberger/scala-sbt
+  commands:
+    - scala compile test
